@@ -3,5 +3,6 @@ This repo will showcase all of the projects I create while completing Udemy's Py
 
 # Demos
  some of my favorite projects I have built
- 
-![BAC0717A-3D87-4914-AF6A-B6438AAC9710_1_102_o](https://user-images.githubusercontent.com/94770319/173219433-3522d702-0d16-4712-b456-2aa5573986d7.jpeg)
+ ![Screen-Recording-2022-06-12-at-2 01 07-AM-5](https://user-images.githubusercontent.com/94770319/173219997-c42097e0-67d1-403c-9436-74050de42199.gif)
+
+
