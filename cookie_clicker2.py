@@ -15,28 +15,45 @@ def get_key(val, my_dict):
          if val == value:
              return key
 
-
 def check_cookies():
     cookies = (driver.find_element(By.ID, "cookies")).text
     actual_cookies = cookies.split()[0]
-    return int(actual_cookies)
+    try:
+        return int(actual_cookies)
+    except ValueError:
+        return int((actual_cookies).replace(",", ""))
 
+
+
+def check_upgrades():
+    try:
+        buy_upgrades = driver.find_elements(By.CSS_SELECTOR, "#upgrades .enabled")
+        for upgrades in buy_upgrades:
+            upgrades.click()
+    except selenium.common.exceptions.NoSuchElementException:
+        return
 def check_panels():
     buy = driver.find_element(By.XPATH, '//*[@id="storeBulkBuy"]')
-    upgrades_cost = {}
+    power_cost = {}
     try:
+
         buy_power = driver.find_elements(By.CSS_SELECTOR, "#products .enabled ")
         for key, power in enumerate(buy_power):
             print(key)
             print(power.get_property("id"))
-            upgrades_cost[power] = int((driver.find_element(By.CSS_SELECTOR, f".enabled .content #productPrice{key}")).text)
-            print(upgrades_cost[power])
-        values = list(upgrades_cost.values())
+            try:
+                power_cost[power] = int((driver.find_element(By.CSS_SELECTOR, f".enabled .content #productPrice{key}")).text)
+                print(power_cost[power])
+            except ValueError:
+                power_cost[power] = int((
+                    (driver.find_element(By.CSS_SELECTOR, f".enabled .content #productPrice{key}")).text).replace(",", ""))
+        values = list(power_cost.values())
+
         for power in buy_power:
-            if check_cookies() > upgrades_cost[power]:
+            if check_cookies() > power_cost[power]:
                 for i in range(len(values)-1, -1, -1):
                     if check_cookies() > values[i]:
-                        get_key(values[i], upgrades_cost).click()
+                        get_key(values[i], power_cost).click()
                         buy.click()
     except selenium.common.exceptions.NoSuchElementException:
         return
@@ -45,18 +62,13 @@ start = time.time()
 
 while True:
     try:
-        while time.time() - start < 5:
+        while time.time() - start < 10:
             button.click()
+        check_upgrades()
         check_panels()
         start = time.time()
     except ElementClickInterceptedException:
         pass
-
-
-
-
-
-
 
 
 
